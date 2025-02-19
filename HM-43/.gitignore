@@ -27,5 +27,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/lesson43.iml
+/HM-43.iml
 /.idea/
+/lesson43.iml
