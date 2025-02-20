@@ -23,6 +23,10 @@ public class Main {
         int port = 9889;
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         System.out.printf("Сервер запущен на http://localhost:%d/%n", port);
+        server.createContext("/", new StaticFileHandler());
+        server.createContext("/apps", new AppHandler());
+        server.createContext("/images", new ImageHandler());
+        server.createContext("/apps/profile", new ProfileHandler());
         server.start();
         System.out.println("путь: " + FileName);
     }
