@@ -199,7 +199,7 @@ public class Main {
 
 
     private static void sendNotFound(HttpExchange exchange) throws IOException {
-        String response = "Ошибка 404: файл не найден";
+        String response = "Error 404";
         exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
 
         try (OutputStream os = exchange.getResponseBody()) {
