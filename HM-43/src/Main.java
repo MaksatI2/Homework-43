@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class Main {
     private static final String FileName = Paths.get("homework").toAbsolutePath().toString();
-    private static final String ImageName = Paths.get("homework").toAbsolutePath().toString();
 
     public static void main(String[] args) throws IOException {
 
@@ -25,20 +24,20 @@ public class Main {
         System.out.printf("Сервер запущен на http://localhost:%d/%n", port);
         server.createContext("/", new StaticFileHandler());
         server.createContext("/apps", new AppHandler());
-        server.createContext("/images", new ImageHandler());
         server.createContext("/apps/profile", new ProfileHandler());
         server.start();
         System.out.println("путь: " + FileName);
     }
 
     static class StaticFileHandler implements HttpHandler {
-        private static final Map<String, String> MIME_Types = new HashMap<>();
-
-        static {
-            MIME_Types.put("html", "text/html");
-            MIME_Types.put("css", "text/css");
-            MIME_Types.put("jpg", "image/jpeg");
-        }
+//        private static final Map<String, String> MIME_Types = new HashMap<>();
+//
+//        static {
+//            MIME_Types.put("html", "text/html");
+//            MIME_Types.put("css", "text/css");
+//            MIME_Types.put("jpg", "image/jpg");
+//            MIME_Types.put("png", "image/png");
+//        }
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -52,7 +51,7 @@ public class Main {
             }
 
             String extension = getFileExtension(filePath.getFileName().toString());
-            String mimeType = MIME_Types.getOrDefault(extension, "application/octet-stream");
+            String mimeType = MIME_Types.getMimeType(extension);
 
             exchange.getResponseHeaders().set("Content-Type", mimeType);
             exchange.sendResponseHeaders(200, Files.size(filePath));
@@ -73,51 +72,6 @@ public class Main {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            try {
-                exchange.getResponseHeaders().add("Content-Type", "text/plan; charset=utf-8");
-
-                int responseCode = 200;
-                int length = 0;
-                exchange.sendResponseHeaders(responseCode, length);
-
-                try (PrintWriter writer = getWriterFrom(exchange)) {
-                    String method = exchange.getRequestMethod();
-                    URI uri = exchange.getRequestURI();
-                    String path = exchange.getHttpContext().getPath();
-
-                    write(writer, "HTTP method", method);
-                    write(writer, "Request", uri.toString());
-                    write(writer, "Handler", path);
-                    writeHeaders(writer, "Request headers", exchange.getRequestHeaders());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private static PrintWriter getWriterFrom(HttpExchange exchange) {
-
-            OutputStream output = exchange.getResponseBody();
-            Charset charset = StandardCharsets.UTF_8;
-
-            return new PrintWriter(output, false, charset);
-        }
-
-        private static void write(Writer writer, String msg, String method) {
-            String data = String.format("%s: %s%n%n", msg, method);
-
-            try {
-
-                writer.write(data);
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-        }
-
-        private static void writeHeaders(Writer writer, String type, Headers headers) {
-            write(writer, type, "");
-            headers.forEach((k, v) -> write(writer, "\t" + k, v.toString()));
 
         }
     }
@@ -126,74 +80,24 @@ public class Main {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            try {
-                exchange.getResponseHeaders().add("Content-Type", "text/plan; charset=utf-8");
-
-                int responseCode = 200;
-                int length = 0;
-                exchange.sendResponseHeaders(responseCode, length);
-
-                try (PrintWriter writer = getWriterFrom(exchange)) {
-                    String method = exchange.getRequestMethod();
-                    URI uri = exchange.getRequestURI();
-                    String path = exchange.getHttpContext().getPath();
-
-                    write(writer, "HTTP method", method);
-                    write(writer, "Request", uri.toString());
-                    write(writer, "Handler", path);
-                    writeHeaders(writer, "Request headers", exchange.getRequestHeaders());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-}
-
-
-        private static PrintWriter getWriterFrom(HttpExchange exchange) {
-
-            OutputStream output = exchange.getResponseBody();
-            Charset charset = StandardCharsets.UTF_8;
-
-            return new PrintWriter(output, false, charset);
-        }
-
-        private static void write(Writer writer, String msg, String method) {
-            String data = String.format("%s: %s%n%n", msg, method);
-
-            try {
-
-                writer.write(data);
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-        }
-
-        private static void writeHeaders(Writer writer, String type, Headers headers) {
-            write(writer, type, "");
-            headers.forEach((k, v) -> write(writer, "\t" + k, v.toString()));
 
         }
     }
 
-    static  class ImageHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            String requestPath = exchange.getRequestURI().getPath().replace("/images/", "");
-            Path filePath = Paths.get(ImageName, requestPath);
-            File file = filePath.toFile();
+    public class MIME_Types {
+        private static final Map<String, String> MIME_Types = initMimeTypes();
 
-            if (!file.exists() || file.isDirectory()) {
-                sendNotFound(exchange);
-                return;
-            }
+        private static Map<String, String> initMimeTypes() {
+            Map<String, String> mimeTypes = new HashMap<>();
+            mimeTypes.put("html", "text/html");
+            mimeTypes.put("css", "text/css");
+            mimeTypes.put("jpg", "image/jpg");
+            mimeTypes.put("png", "image/png");
+            return mimeTypes;
+        }
 
-            String contentType = Files.probeContentType(filePath);
-            if (contentType == null) {
-                contentType = "image/jpeg";
-            }
-
-            sendFileResponse(exchange, file, contentType);
+        public static String getMimeType(String extension) {
+            return MIME_Types.getOrDefault(extension, "application/octet-stream");
         }
     }
 
@@ -207,14 +111,12 @@ public class Main {
         }
     }
 
-    private static void sendFileResponse(HttpExchange exchange, File file, String contentType) throws IOException {
-        Headers headers = exchange.getResponseHeaders();
-        headers.set("Content-Type", contentType);
-        exchange.sendResponseHeaders(200, file.length());
+    private static void sendHtmlResponse(HttpExchange exchange, String response) throws IOException {
+        exchange.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
+        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
 
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(response.getBytes(StandardCharsets.UTF_8));
+        }
     }
-
-
-
-
 }
