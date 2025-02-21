@@ -8,7 +8,6 @@ import java.net.InetSocketAddress;
 import java.nio.file.Paths;
 
 public class Main {
-    private static final String FILE_PATH = Paths.get("homework").toAbsolutePath().toString();
     private static final String HTML_FILE_PATH = Paths.get("HTMLFiles").toAbsolutePath().toString();
 
     public static void main(String[] args) throws IOException {
@@ -21,7 +20,5 @@ public class Main {
         server.createContext("/apps/profile", new ProfileHandler(HTML_FILE_PATH));
 
         server.start();
-        System.out.println("Путь: " + FILE_PATH);
-        System.out.println("Путь: " + HTML_FILE_PATH);
     }
 }
