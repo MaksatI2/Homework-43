@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <title>App manager</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,8 +32,13 @@
             padding: 10px;
             border-radius: 5px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+        }
+        li img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
         }
         .done {
             text-decoration: line-through;
@@ -47,6 +52,20 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .actions button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .actions button:hover {
+            background-color: green;
+        }
+        body {
+            background: url("./bg/bg.png") 0 0 repeat;
+        }
     </style>
 </head>
 <body>
@@ -55,25 +74,30 @@
     <h1>Список приложений</h1>
     <ul id="taskList">
         <li>
+            <img src="./images/1.jpg" alt="Spotify">
             <span>Spotify</span>
             <button>Войти</button>
         </li>
         <li>
+            <img src="./images/1.jpg" alt="Telegram">
             <span>Telegram</span>
             <button>Войти</button>
         </li>
         <li>
+            <img src="./images/1.jpg" alt="Whatsapp">
             <span>Whatsapp</span>
             <button>Войти</button>
         </li>
         <li>
+            <img src="./images/1.jpg" alt="Локатор">
             <span>Локатор</span>
             <button>Войти</button>
         </li>
-        <li>
-            <a href="/"> <button>Вернуться на главную страницу</button></a>
-        </li>
     </ul>
+
+    <div class="actions">
+        <a href="/" class="ref"> <button>Вернуться на главную страницу</button></a>
+    </div>
 </div>
 
 <script>
