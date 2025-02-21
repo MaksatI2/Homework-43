@@ -1,10 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #e3e3e3;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .actions button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .actions button:hover {
+            background-color: #0056b3;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-header .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .profile-header .status {
+            font-size: 14px;
+            color: #888;
+        }
+        div img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .actions button:hover {
+            background-color: green;
+        }
+    </style>
 </head>
 <body>
 
+<div class="container">
+    <h1>Профиль пользователя</h1>
+
+    <div class="profile-header">
+        <img src="./images/1.jpg" alt="Avatar">
+        <div>
+            <div class="name">Максат</div>
+            <div class="status">В сети</div>
+        </div>
+    </div>
+    <ul>
+        <li>
+            <span>Имя:</span>
+            <span>Максат</span>
+        </li>
+        <li>
+            <span>Телефон:</span>
+            <span>+996 700 123 456</span>
+        </li>
+    </ul>
+
+    <div class="actions">
+        <a href="/" class="ref"><button>Вернуться на главную страницу</button></a>
+    </div>
+</div>
 </body>
 </html>
