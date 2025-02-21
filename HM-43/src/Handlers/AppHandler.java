@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static Util.HttpServerUtil.getFileExtension;
+import static Util.HttpServerUtil.sendNotFound;
 
 public class AppHandler implements HttpHandler {
     private final String filePath;
@@ -40,14 +41,6 @@ public class AppHandler implements HttpHandler {
 
         try (OutputStream os = exchange.getResponseBody()) {
             Files.copy(filePath, os);
-        }
-    }
-
-    private void sendNotFound(HttpExchange exchange) throws IOException {
-        String response = "Error 404 - Not Found";
-        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes(StandardCharsets.UTF_8));
         }
     }
 }
